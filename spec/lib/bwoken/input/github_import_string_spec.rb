@@ -1,8 +1,8 @@
-require 'bwoken/coffeescript/github_import_string'
+require 'bwoken/input/github_import_string'
 
-describe Bwoken::Coffeescript::GithubImportString do
+describe Bwoken::Input::GithubImportString do
   let(:string) { '#github alexvollmer/tuneup_js/tuneup.js' }
-  subject { Bwoken::Coffeescript::GithubImportString.new(string) }
+  subject { Bwoken::Input::GithubImportString.new(string) }
 
   describe '#parse' do
     it 'ensures the github repo is pulled' do

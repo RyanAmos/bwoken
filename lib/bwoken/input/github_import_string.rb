@@ -2,7 +2,7 @@ require 'fileutils'
 require File.expand_path('../import_string', __FILE__)
 
 module Bwoken
-  class Coffeescript
+  class Input
     class GithubImportString < ImportString
       attr_reader :repo_name, :file_path
 

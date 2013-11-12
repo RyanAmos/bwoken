@@ -1,5 +1,5 @@
 module Bwoken
-  class Coffeescript
+  class Input
     class ImportString
 
       def initialize string

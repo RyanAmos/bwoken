@@ -3,12 +3,16 @@ require 'coffee_script/source'
 require 'json'
 require 'execjs'
 
-require File.expand_path('../coffeescript/import_string', __FILE__)
-require File.expand_path('../coffeescript/github_import_string', __FILE__)
+require File.expand_path('../input/import_string', __FILE__)
+require File.expand_path('../input/github_import_string', __FILE__)
 
 module Bwoken
-  class Coffeescript
+  class Input
     class << self
+
+      def coffee_script? source
+        source.downcase.end_with?('.coffee')
+      end
 
       def coffee_script_source
         return @coffeescript if @coffeescript
@@ -24,21 +28,25 @@ module Bwoken
         @context ||= ExecJS.compile(coffee_script_source)
       end
 
-      def precompile coffeescript
-        coffeescript.lines.partition {|line| line =~ /^#(?:github|import) .*$/}
+      def preprocess script
+        script.lines.partition {|line| line =~ /^#(?:github|import) .*$/}
       end
 
-      def compile source, target
-        githubs_and_imports, sans_imports = precompile(IO.read source)
+      def process source, target
+        githubs_and_imports, sans_imports = preprocess(IO.read source)
 
-        javascript = coffeescript_to_javascript sans_imports.join
+        javascript = compile_to_javascript(source, sans_imports.join)
         import_strings = githubs_to_imports(githubs_and_imports)
 
         write import_strings, javascript, :to => target
       end
 
-      def coffeescript_to_javascript coffee
-        self.context.call 'CoffeeScript.compile', coffee, :bare => true
+      def compile_to_javascript source, script
+        if coffee_script? source
+          self.context.call 'CoffeeScript.compile', script, :bare => true
+        else
+          script
+        end
       end
 
       def githubs_to_imports strings

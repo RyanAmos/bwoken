@@ -4,12 +4,12 @@ require 'fileutils'
 
 require 'bwoken'
 require 'bwoken/build'
-require 'bwoken/coffeescript'
 require 'bwoken/device'
 #TODO: make formatters dynamically loadable during runtime
 require 'bwoken/formatter'
 require 'bwoken/formatters/passthru_formatter'
 require 'bwoken/formatters/colorful_formatter'
+require 'bwoken/input'
 require 'bwoken/script_runner'
 
 module Bwoken
@@ -91,13 +91,13 @@ BANNER
         compiled_coffee.zip(coffeescripts).each do |target, source|
           containing_dir = target.pathmap('%d')
           ensure_directory containing_dir
-          Bwoken::Coffeescript.compile source, target
+          Bwoken::Input.process source, target
         end
 
         copied_javascripts.zip(javascripts).each do |target, source|
           containing_dir = target.pathmap('%d')
           ensure_directory containing_dir
-          FileUtils.cp source, target
+          Bwoken::Input.process source, target
         end
       end
 

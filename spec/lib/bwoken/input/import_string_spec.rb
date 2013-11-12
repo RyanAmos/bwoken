@@ -1,8 +1,8 @@
-require 'bwoken/coffeescript/import_string'
+require 'bwoken/input/import_string'
 
-describe Bwoken::Coffeescript::ImportString do
+describe Bwoken::Input::ImportString do
   let(:string) { '#import foo.js' }
-  subject { Bwoken::Coffeescript::ImportString.new(string) }
+  subject { Bwoken::Input::ImportString.new(string) }
 
   describe '#parse' do
     it 'does not affect @string' do
